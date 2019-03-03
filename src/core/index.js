@@ -36,7 +36,7 @@ const iconMap = {
 
 class Lego {
   constructor(element) {
-    if(typeof element === undefined || typeof element === null) {
+    if(typeof element === undefined) {
       throw new Error(`querySelector is required`);
     }
     this.rootElement = null;
@@ -50,32 +50,48 @@ class Lego {
       toolbar: true,
       menus: [
         [
-          'undo',
-          'redo'
+          { action: 'undo', toolTip: '撤销' },
+          { action: 'redo', toolTip: '重做' },
         ],
         [
-          'head'
+          { action: 'head', toolTip: '标题' },
         ],
         [
-          'bold',
-          'italic',
-          'underline',
-          'strikeThrough'
+          { action: 'bold', toolTip: '加粗' },
+          { action: 'italic', toolTip: '斜体' },
+          { action: 'underline', toolTip: '下划线' },
+          { action: 'strikeThrough', toolTip: '删除线' },
         ],
         [
-          'alignJustify',
-          'alignLeft',
-          'alignRight',
-          'alignCenter'
+          { action: 'alignJustify', toolTip: '两端对齐' },
+          { action: 'alignLeft', toolTip: '居左对齐' },
+          { action: 'alignRight', toolTip: '居右对齐' },
+          { action: 'alignCenter', toolTip: '居中对齐' },
         ],
         [
-          'orderedList',
-          'unorderedList',
-          'blockquote',
-          'code'
+          { action: 'orderedList', toolTip: '有序列表' },
+          { action: 'unorderedList', toolTip: '无序列表' },
+          { action: 'blockquote', toolTip: '引用' },
+          { action: 'code', toolTip: '代码' },
         ]
       ]
     };
+  }
+
+  handleEvent(eventType, e) {
+    eventType = eventType.toUpperCase();
+    e.preventDefault();
+    switch(eventType) {
+      case 'KEYDOWN':
+        
+      break;
+      case 'KEYUP':
+        
+      break;
+      case 'KEYPRESS':
+        
+      break;
+    }
   }
   
   initToolbar() {
@@ -86,7 +102,7 @@ class Lego {
     const { menus } = this.config;
     const htmlStr = menus.map( group =>  `<ul class="${styles.toolbarGroup}">
       ${
-        group.map( item => `<li><img src=${iconMap[item]}/></li>`).join('')
+        group.map( item => `<li><span>${item.toolTip}</span><img src=${iconMap[item.action]}/></li>`).join('')
       }
     </ul>`).join('');
     toolbar.innerHTML = htmlStr;
@@ -99,6 +115,9 @@ class Lego {
     legoContanier.className = styles.legoContanier;
     legoMain.className = styles.legoMain;
     legoMain.contentEditable = true;
+    legoMain.addEventListener('keydown', this.handleEvent.bind(this, 'keydown'));
+    legoMain.addEventListener('keyup', this.handleEvent.bind(this, 'keyup'));
+    legoMain.addEventListener('keypress', this.handleEvent.bind(this, 'keypress'));
     legoContanier.appendChild(legoMain);
     rootElement.appendChild(legoContanier);
     this.legoContanier = legoContanier;

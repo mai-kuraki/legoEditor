@@ -35,6 +35,18 @@ module.exports = {
       {
         test: /\.svg/, 
         loader: 'svg-url-loader'
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'eslint-loader',
+          options: {
+            
+          }
+        },
+        enforce: 'pre',
+        exclude: /node_modules/,
+        include: [__dirname + '/src'],
       }
     ]
   },
